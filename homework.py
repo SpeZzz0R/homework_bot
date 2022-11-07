@@ -83,7 +83,6 @@ def check_response(response):
 
 def parse_status(homework):
     """Извлечение из информации о конкретной работе статуса этой работы."""
-
     if 'homework_name' not in homework:
         error_message = 'Ошибка доступа по ключу "homework_name".'
         logger.error(error_message)
