@@ -81,11 +81,6 @@ def check_response(response):
         raise KeyError(
             'Отсутствует ключ "homeworks" в полученных данных от сервиса.'
         )
-    current_date = response.get('current_date')
-    if 'current_date' not in response:
-        raise KeyError(
-            'Отсутствует ключ "current_date" в полученных данных от сервиса.'
-        )
     if not isinstance(homeworks, list):
         raise TypeError(
             'Запрошенные данные - некорректны, в полученных данных должен '
