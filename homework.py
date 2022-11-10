@@ -1,14 +1,15 @@
 import datetime
-import exceptions
 import logging
 import os
-import requests
 import sys
-import telegram
 import time
-from dotenv import load_dotenv
 from http import HTTPStatus
 
+import requests
+import telegram
+from dotenv import load_dotenv
+
+import exceptions
 
 load_dotenv()
 
@@ -37,6 +38,8 @@ logger = logging.getLogger(__name__)
 logger.addHandler(
     logging.StreamHandler()
 )
+
+IS_TRUE = True
 
 
 def send_message(bot, message):
@@ -81,6 +84,10 @@ def check_response(response):
         raise KeyError(
             'Отсутствует ключ "homeworks" в полученных данных от сервиса.'
         )
+    if 'current_date' not in response:
+        raise KeyError(
+            'Отсутствует ключ "current_date" в полученных данных от сервиса.'
+        )
     if not isinstance(homeworks, list):
         raise TypeError(
             'Запрошенные данные - некорректны, в полученных данных должен '
@@ -95,6 +102,8 @@ def parse_status(homework):
     if 'homework_name' not in homework:
         raise KeyError('Ошибка доступа по ключу "homework_name".')
     homework_status = homework.get('status')
+    if 'status' not in homework:
+        raise KeyError('Ошибка доступа по ключу "status".')
     if homework_status not in HOMEWORK_STATUSES:
         raise exceptions.ErrorStatus('Статус проекта незадокументирован.')
 
@@ -110,7 +119,7 @@ def check_tokens():
 def main():
     """Основная логика работы бота."""
     if not check_tokens():
-        sys.exit(1)
+        sys.exit('Отсутствует(-ют) токен(-ы).')
 
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     current_timestamp = int(time.time())
@@ -124,15 +133,17 @@ def main():
         try:
             response = get_api_answer(current_timestamp)
             homeworks = check_response(response)
-            quantity_of_homeworks = len(homeworks)
             if homeworks:
                 message = parse_status(homeworks[0])
+                try:
+                    send_message(bot, message)
+                except Exception as error:
+                    raise exceptions.RepeatMessage(
+                        f'Было отправлено повторное сообщение: {error}'
+                    )
             else:
                 logger.info('Проектов нет.')
-            while quantity_of_homeworks > 0:
-                message = parse_status(homeworks[quantity_of_homeworks - 1])
-                send_message(bot, message)
-                quantity_of_homeworks -= 1
+
             logger.debug(
                 'Статус проекта не изменился. '
                 'Повторный запрос будет отправлен через 10 минут.'
