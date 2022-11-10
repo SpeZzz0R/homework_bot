@@ -8,11 +8,6 @@ class NoSendMessage(Exception):
     pass
 
 
-class RepeatMessage(Exception):
-    """Было отправлено повторное сообщение."""
-    pass
-
-
 class RequestFailure(Exception):
     """Проищошел сбой при запросе к сервису."""
     pass

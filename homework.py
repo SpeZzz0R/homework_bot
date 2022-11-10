@@ -39,8 +39,6 @@ logger.addHandler(
     logging.StreamHandler()
 )
 
-IS_TRUE = True
-
 
 def send_message(bot, message):
     """Отправка сообщения в Телеграм."""
@@ -128,19 +126,17 @@ def main():
         bot,
         f'Запрос сделан: {request_time.strftime("%d-%m-%Y %H:%M:%S")}'
     )
+    previous_message = None
 
     while True:
         try:
             response = get_api_answer(current_timestamp)
             homeworks = check_response(response)
             if homeworks:
-                message = parse_status(homeworks[0])
-                try:
-                    send_message(bot, message)
-                except Exception as error:
-                    raise exceptions.RepeatMessage(
-                        f'Было отправлено повторное сообщение: {error}'
-                    )
+                current_message = parse_status(homeworks[0])
+                if current_message != previous_message:
+                    send_message(bot, current_message)
+                    previous_message = current_message
             else:
                 logger.info('Проектов нет.')
 
