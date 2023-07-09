@@ -7,12 +7,10 @@
 
 ## Используемые технологии
 - Python 3.10
-- python-dotenv==0.19.0
-- python-telegram-bot==13.7
-- requests==2.26.0
+- python-dotenv 0.19.0
+- python-telegram-bot 13.7
 
 
-## Запуск проекта	
 ## Запуск проекта
 * Клонируйте репозиторий.
 ```
