@@ -14,7 +14,7 @@
 ## Запуск проекта
 * Клонируйте репозиторий.
 ```
-git clone git@github.com:SpeZzz0R/foodgram-project-react.git
+git clone git@github.com:SpeZzz0R/homework_bot.git
 ```
 * Перейдите в его корневую папку.
 * Создайте виртуальное окружение Python версии 3.10. Активируйте его.
