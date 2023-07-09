@@ -25,6 +25,7 @@ py -3.10 -m venv venv
 . venv/Scripts/activate
 ```
 * Создайте файл .env, в котором должны быть следующие переменные:
+
 -- PRACTICUM_TOKEN - токен для доступа к API Яндекс.Практикум
 -- TELEGRAM_TOKEN - токен бота, полученный у @BotFather в Телеграме
 -- TELEGRAM_CHAT_ID - ID чата с ботом, в который будут отправляться сообщения
